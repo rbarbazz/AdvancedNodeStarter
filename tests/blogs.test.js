@@ -1,3 +1,4 @@
+Number.prototype._called = {};
 const Page = require('./helpers/page');
 
 let page;
@@ -60,5 +61,39 @@ describe('When logged in', () => {
       expect(titleError).toEqual('You must provide a value');
       expect(contentError).toEqual('You must provide a value');
     });
+  });
+});
+
+describe('When not logged in', () => {
+  test('User cannot create blog posts', async () => {
+    const result = await page.evaluate(() =>
+      fetch('/api/blogs', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: 'My Title',
+          content: 'My Content'
+        })
+      }).then(res => res.json())
+    );
+
+    expect(result).toEqual({ error: 'You must log in!' });
+  });
+
+  test('User cannot get a list of posts', async () => {
+    const result = await page.evaluate(() =>
+      fetch('/api/blogs', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+    );
+
+    expect(result).toEqual({ error: 'You must log in!' });
   });
 });
