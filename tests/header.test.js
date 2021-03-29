@@ -19,6 +19,7 @@ test('the header has the correct text', async () => {
 
 test('clicking login starts the oauth flow', async () => {
   await page.click('.right a');
+  await new Promise(r => setTimeout(r, 1000));
 
   expect(page.url()).toMatch(/accounts\.google\.com/);
 });
