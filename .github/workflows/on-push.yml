@@ -36,3 +36,9 @@ jobs:
         run: nohup npm run start &
       - name: Run tests
         run: sleep 3 && npm run test
+      - name: Send Discord notification
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.WEBHOOK_ID }}
+          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
+          message: The build for ${{ github.repository }} has passed
